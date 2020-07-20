@@ -19,19 +19,19 @@ final class RoomManager {
     
     init() {
         // Look for changes in network
-        defaultCenter.addObserver(self, selector: "handleNetworkChange:",
-            name: kReachabilityChangedNotification, object: nil)
+        defaultCenter.addObserver(self, selector: #selector(RoomManager.handleNetworkChange(_:)),
+            name: NSNotification.Name.reachabilityChanged, object: nil)
     }
     
     deinit {
         defaultCenter.removeObserver(self)
     }
     
-    func addRoom(server:String, room:String, cytubeRoom:CytubeRoom) {
+    func addRoom(_ server:String, room:String, cytubeRoom:CytubeRoom) {
         rooms.append(RoomContainer(server: server, room: room, cytubeRoom: cytubeRoom))
     }
     
-    func findRoom(room:String, server:String) -> CytubeRoom? {
+    func findRoom(_ room:String, server:String) -> CytubeRoom? {
         for cRoom in rooms {
             if cRoom.server == server && cRoom.room == room {
                 return cRoom.cytubeRoom
@@ -40,7 +40,7 @@ final class RoomManager {
         return nil
     }
     
-    func findRoomIndex(room:String, server:String) -> Int? {
+    func findRoomIndex(_ room:String, server:String) -> Int? {
         for i in 0..<roomMng.rooms.count {
             if rooms[i].server == server && rooms[i].room == room {
                 return i
@@ -58,12 +58,12 @@ final class RoomManager {
         return nil
     }
     
-    func getRoomAtIndex(index:Int) -> CytubeRoom {
+    func getRoomAtIndex(_ index:Int) -> CytubeRoom {
         return rooms[index].cytubeRoom
     }
     
-    func removeRoom(roomAtIndex:Int) -> CytubeRoom {
-        let con = rooms.removeAtIndex(roomAtIndex)
+    func removeRoom(_ roomAtIndex:Int) -> CytubeRoom {
+        let con = rooms.remove(at: roomAtIndex)
         con.cytubeRoom.forgetUser()
         self.saveRooms()
         return con.cytubeRoom
@@ -92,28 +92,28 @@ final class RoomManager {
     }
     
     // If we go from wifi to cellular we need to reconnect
-    @objc func handleNetworkChange(not:NSNotification) {
-        let status = internetReachability.currentReachabilityStatus()
-        if status.rawValue == 2 {
+    @objc func handleNetworkChange(_ not:Notification) {
+        let statusRawValue = internetReachability?.currentReachabilityStatus().rawValue
+        if statusRawValue == 2 {
             for cRoom in rooms {
                 if (cRoom.cytubeRoom != nil && cRoom.cytubeRoom!.connected) {
-                    cRoom.cytubeRoom?.socket?.open()
+                    cRoom.cytubeRoom?.socket!.connect()
                 }
             }
-        } else if status.rawValue == 0 {
+        } else if statusRawValue == 0 {
             for cRoom in rooms {
                 if cRoom.cytubeRoom != nil && cRoom.cytubeRoom!.connected {
                     cRoom.cytubeRoom?.closeSocket()
                 }
             }
-            defaultCenter.postNotificationName("noInternet", object: nil)
+            defaultCenter.post(name: Notification.Name(rawValue: "noInternet"), object: nil)
         }
     }
     
     func saveRooms() {
         NSLog("Saving Rooms")
-        let handler = NSFileManager()
-        let pathsArray = NSSearchPathForDirectoriesInDomains(.LibraryDirectory, .UserDomainMask, true)
+        let handler = FileManager()
+        let pathsArray = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)
         let path = pathsArray[0] + "/rooms.json"
         var roomArray = [NSDictionary]()
         var sroom:NSDictionary!
@@ -139,12 +139,12 @@ final class RoomManager {
         let roomsForSave = [
             "version": 1.0,
             "rooms": roomArray
-        ]
+        ] as [String:Any]
         
         do {
-            let jsonForWriting = try NSJSONSerialization.dataWithJSONObject(roomsForSave, options: .PrettyPrinted)
+            let jsonForWriting = try JSONSerialization.data(withJSONObject: roomsForSave, options: .prettyPrinted)
             
-            handler.createFileAtPath(path, contents: jsonForWriting, attributes: nil)
+            handler.createFile(atPath: path, contents: jsonForWriting, attributes: nil)
             NSLog("Rooms saved")
         } catch {
             NSLog("Error saving rooms")
@@ -153,19 +153,19 @@ final class RoomManager {
     
     func loadRooms() -> Bool {
         NSLog("Loading rooms")
-        let handler = NSFileManager()
-        let pathsArray = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.LibraryDirectory,
-            NSSearchPathDomainMask.UserDomainMask, true)
+        let handler = FileManager()
+        let pathsArray = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.libraryDirectory,
+            FileManager.SearchPathDomainMask.userDomainMask, true)
         let path = pathsArray[0] + "/rooms.json"
         
-        if !handler.fileExistsAtPath(path) {
+        if !handler.fileExists(atPath: path) {
             return false
         }
         
-        let data = NSData(contentsOfFile: path)
+        let data = try? Data(contentsOf: URL(fileURLWithPath: path))
         do {
-            if let roomsFromData = try NSJSONSerialization.JSONObjectWithData(data!,
-                options: NSJSONReadingOptions.AllowFragments) as? NSDictionary  {
+            if let roomsFromData = try JSONSerialization.jsonObject(with: data!,
+                options: JSONSerialization.ReadingOptions.allowFragments) as? NSDictionary  {
                     for i in 0..<(roomsFromData["rooms"] as! NSArray).count {
                         let con = (roomsFromData["rooms"] as! NSArray)[i] as! NSDictionary
                         let recreatedRoom = CytubeRoom(roomName: con["room"] as! String,

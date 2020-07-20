@@ -11,17 +11,17 @@ class ChatLinkController: UIViewController, UIWebViewDelegate {
     
     @IBOutlet weak var webView:UIWebView!
     @IBOutlet weak var navBarTitle:UINavigationItem!
-    var link:NSURL!
+    var link:URL!
     
     @IBAction func backButtonClicked() {
         self.webView.loadHTMLString("", baseURL: nil)
         self.webView = nil
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         self.navBarTitle.title = self.link.host
-        let req = NSURLRequest(URL: self.link)
+        let req = URLRequest(url: self.link)
         self.webView.loadRequest(req)
     }
 }

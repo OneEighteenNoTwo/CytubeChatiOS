@@ -13,21 +13,21 @@ final class DatabaseManger {
     
     init?() {
         var shouldCreateTables = true
-        let manager = NSFileManager.defaultManager()
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory,
-            NSSearchPathDomainMask.UserDomainMask, true)
-        
+        let manager = FileManager.default
+        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,
+            FileManager.SearchPathDomainMask.userDomainMask, true)
+
         let documentsDirectory = paths[0]
-        let destPath = NSURL(string: documentsDirectory)!.URLByAppendingPathComponent("cytubechat.db")
-        if manager.fileExistsAtPath(destPath.absoluteString) {
+        let destPath = URL(string: documentsDirectory)!.appendingPathComponent("cytubechat.db")
+        if manager.fileExists(atPath: destPath.absoluteString) {
             shouldCreateTables = false
         }
-        
+
         do {
             db = try Connection(destPath.absoluteString)
-            try manager.setAttributes([NSFileProtectionKey: NSFileProtectionComplete],
+            try manager.setAttributes([FileAttributeKey.protectionKey: FileProtectionType.complete],
                 ofItemAtPath: destPath.absoluteString)
-            
+
             if shouldCreateTables {
                 createTables()
             }
@@ -55,26 +55,32 @@ final class DatabaseManger {
         }
     }
     
-    func getUsernamePasswordForChannel(server server:String, channel:String) -> (String, String)? {
+    func getUsernamePasswordForChannel(server:String, channel:String) -> (String, String)? {
         let channels = Table("channels")
         let name = Expression<String>("name")
         let username = Expression<String>("username")
         let password = Expression<String>("password")
         let key = Expression<String>("key")
         let query = channels.select(username, password, key).filter(name == (server + "." + channel))
-        
-        for user in db.prepare(query) {
-            let passwordData = NSData(base64EncodedString: user[password], options: NSDataBase64DecodingOptions())
-            let upword = CytubeUtils.decryptPassword(passwordData!, key: user[key])
-            if (upword != nil) {
-                return (user[username], upword!)
+        do{
+            let users = try db.prepare(query)
+            for user in users {
+                let passwordData = NSData(base64Encoded: user[password], options: NSData.Base64DecodingOptions())
+                let upword = CytubeUtils.decryptPassword(passwordData! as Data, key: user[key])
+                if (upword != nil) {
+                    return (user[username], upword!)
+                }
             }
         }
+        catch{
+        
+        }
+        
         
         return nil
     }
     
-    func insertEntryForChannel(server server:String, channel:String, uname:String, pword:String) {
+    func insertEntryForChannel(server:String, channel:String, uname:String, pword:String) {
         let channels = Table("channels")
         let name = Expression<String>("name")
         let username = Expression<String>("username")
@@ -92,12 +98,12 @@ final class DatabaseManger {
                 try db.run(channels.filter(name == completeChannel)
                     .update(username <- uname, password <- ePassword!, key <- key2))
             } catch {
-                
+
             }
         }
-    }
+   }
     
-    func removeEntryForChannel(server server:String, channel:String) {
+    func removeEntryForChannel(server:String, channel:String) {
         let channels = Table("channels")
         let name = Expression<String>("name")
         let channelToFind = server + "." + channel
@@ -106,7 +112,8 @@ final class DatabaseManger {
         do {
             try db.run(foundChannel.delete())
         } catch {
-            
+
         }
     }
 }
+

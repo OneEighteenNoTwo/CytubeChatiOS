@@ -8,8 +8,8 @@
 import Foundation
 
 let dbManger = DatabaseManger()
-let defaultCenter = NSNotificationCenter.defaultCenter()
-let internetReachability = Reachability.reachabilityForInternetConnection()
+let defaultCenter = NotificationCenter.default
+let internetReachability = Reachability.forInternetConnection()
 let roomMng = RoomManager()
 
 func ==(lhs:CytubeUser, rhs:CytubeUser) -> Bool {
@@ -24,7 +24,7 @@ func <(lhs:CytubeUser, rhs:CytubeUser) -> Bool {
     if lhs.rank < rhs.rank {
         return true
     } else if lhs.rank == rhs.rank
-        && lhs.username.lowercaseString > rhs.username.lowercaseString {
+        && lhs.username.lowercased() > rhs.username.lowercased() {
         return true
     }
     

@@ -11,7 +11,7 @@ final class CytubeUser: Comparable {
     let username:String!
     var afk = false
     var color:UIColor? {
-        switch rank {
+        switch rank! {
         case 0:
             return UIColor(red: 0.6, green: 0.6, blue: 0.23, alpha: 1)
         case 2:
@@ -29,7 +29,7 @@ final class CytubeUser: Comparable {
         }
     }
     
-    var profileImage:NSURL?
+    var profileImage:URL?
     var profileText:String?
     var rank:Int!
     
@@ -39,7 +39,7 @@ final class CytubeUser: Comparable {
         self.afk = (user["meta"] as! [String: AnyObject])["afk"] as! Bool
         if let imageString = (user["profile"] as! [String: AnyObject])["image"] as? String {
             if imageString != "" {
-                self.profileImage = NSURL(string: imageString)
+                self.profileImage = URL(string: imageString)
             }
         }
         self.profileText = (user["profile"] as! [String: AnyObject])["text"] as? String
@@ -49,12 +49,13 @@ final class CytubeUser: Comparable {
         let range = NSMakeRange(0, username.characters.count)
         let attString = NSMutableAttributedString(string: self.username, attributes: nil)
         if let color = self.color {
-            attString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+            attString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: range)
         }
         
         if self.afk {
-            let font = UIFont.italicSystemFontOfSize(16)
-            attString.addAttribute(kCTFontAttributeName as String, value: font, range: range)
+            let font = UIFont.italicSystemFont(ofSize: 16)
+            let name = kCTFontAttributeName as String
+            attString.addAttribute(NSAttributedString.Key(name), value: font, range: range)
         }
         
         return attString

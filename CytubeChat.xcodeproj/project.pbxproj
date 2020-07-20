@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3925E24B0B7F0D8305085DA0 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FDB61C4A094F760C8AE9EC0 /* Pods.framework */; };
+		0B46BC730F2A11BBC4737F43 /* Pods_CytubeChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDA6A51FBE3AD5128E582DA3 /* Pods_CytubeChat.framework */; };
 		74038C8319F00E65005DB2A7 /* CytubeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74038C8219F00E65005DB2A7 /* CytubeUser.swift */; };
 		740BEF4B19EC315400E577A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740BEF4A19EC315400E577A0 /* AppDelegate.swift */; };
 		740BEF4D19EC315400E577A0 /* RoomsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740BEF4C19EC315400E577A0 /* RoomsController.swift */; };
@@ -52,7 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6FDB61C4A094F760C8AE9EC0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		391673F474D341E899B7857E /* Pods-CytubeChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CytubeChat.release.xcconfig"; path = "Target Support Files/Pods-CytubeChat/Pods-CytubeChat.release.xcconfig"; sourceTree = "<group>"; };
 		74038C8219F00E65005DB2A7 /* CytubeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CytubeUser.swift; sourceTree = "<group>"; };
 		740BEF4519EC315400E577A0 /* CytubeChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CytubeChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		740BEF4919EC315400E577A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -93,8 +93,8 @@
 		74BB03DF19FC708A000534DB /* PrivacyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyController.swift; sourceTree = "<group>"; };
 		74CF921F1A4612DF00D016BC /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		74F2A0D01BE12D54009DB9E7 /* SwiftRegex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftRegex.swift; sourceTree = "<group>"; };
-		9EEC52A46E77B414C92E95A7 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		F867DEFF7F0722362A8D54E3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B10F8ED1B76B53D43D570281 /* Pods-CytubeChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CytubeChat.debug.xcconfig"; path = "Target Support Files/Pods-CytubeChat/Pods-CytubeChat.debug.xcconfig"; sourceTree = "<group>"; };
+		DDA6A51FBE3AD5128E582DA3 /* Pods_CytubeChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CytubeChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,20 +105,19 @@
 				747DBA891A12AF5A00486E7E /* SystemConfiguration.framework in Frameworks */,
 				740BEF7D19EC321300E577A0 /* Security.framework in Frameworks */,
 				740BEF7B19EC320700E577A0 /* Foundation.framework in Frameworks */,
-				3925E24B0B7F0D8305085DA0 /* Pods.framework in Frameworks */,
+				0B46BC730F2A11BBC4737F43 /* Pods_CytubeChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		411B44A88FE1E1ABE8283DCD /* Pods */ = {
+		73A188C85D3062453AA89A0C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9EEC52A46E77B414C92E95A7 /* Pods.debug.xcconfig */,
-				F867DEFF7F0722362A8D54E3 /* Pods.release.xcconfig */,
+				DDA6A51FBE3AD5128E582DA3 /* Pods_CytubeChat.framework */,
 			);
-			name = Pods;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		740BEF3C19EC315400E577A0 = {
@@ -129,8 +128,8 @@
 				740BEF7A19EC320700E577A0 /* Foundation.framework */,
 				740BEF4719EC315400E577A0 /* CytubeChat1.0 */,
 				740BEF4619EC315400E577A0 /* Products */,
-				411B44A88FE1E1ABE8283DCD /* Pods */,
-				D326682C93D5A0D7994150D5 /* Frameworks */,
+				B9C8C706254E0C9D5C7A1D53 /* Pods */,
+				73A188C85D3062453AA89A0C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -217,12 +216,13 @@
 			path = RNCryptor;
 			sourceTree = "<group>";
 		};
-		D326682C93D5A0D7994150D5 /* Frameworks */ = {
+		B9C8C706254E0C9D5C7A1D53 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6FDB61C4A094F760C8AE9EC0 /* Pods.framework */,
+				B10F8ED1B76B53D43D570281 /* Pods-CytubeChat.debug.xcconfig */,
+				391673F474D341E899B7857E /* Pods-CytubeChat.release.xcconfig */,
 			);
-			name = Frameworks;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,13 +232,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 740BEF6619EC315500E577A0 /* Build configuration list for PBXNativeTarget "CytubeChat" */;
 			buildPhases = (
-				37138B50A59871C9773C2FE7 /* Check Pods Manifest.lock */,
+				50802CF3801AB1B1BE2F4257 /* [CP] Check Pods Manifest.lock */,
 				740BEF4119EC315400E577A0 /* Sources */,
 				740BEF4219EC315400E577A0 /* Frameworks */,
 				740BEF4319EC315400E577A0 /* Resources */,
 				745855E01A3B5E90000F6495 /* CopyFiles */,
-				F4FBEC6B0A185541789F97BC /* Embed Pods Frameworks */,
-				970A8ED830D158AFF9D2E1C7 /* Copy Pods Resources */,
+				B0F4BC1D5EF1740CAF44E060 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -257,12 +256,13 @@
 			attributes = {
 				LastSwiftMigration = 0710;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Erik Little";
 				TargetAttributes = {
 					740BEF4419EC315400E577A0 = {
 						CreatedOnToolsVersion = 6.0.1;
 						DevelopmentTeam = 6XBC3G4NFX;
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 1;
@@ -276,6 +276,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -303,49 +304,48 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		37138B50A59871C9773C2FE7 /* Check Pods Manifest.lock */ = {
+		50802CF3801AB1B1BE2F4257 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
+			inputFileListPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CytubeChat-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		970A8ED830D158AFF9D2E1C7 /* Copy Pods Resources */ = {
+		B0F4BC1D5EF1740CAF44E060 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CytubeChat/Pods-CytubeChat-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F4FBEC6B0A185541789F97BC /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CytubeChat/Pods-CytubeChat-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -411,13 +411,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -426,6 +436,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -438,11 +449,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -454,13 +466,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -468,22 +490,24 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		740BEF6719EC315500E577A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9EEC52A46E77B414C92E95A7 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = B10F8ED1B76B53D43D570281 /* Pods-CytubeChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -491,7 +515,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = CytubeChat1.0/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LLVM_LTO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.milkbartube.$(PRODUCT_NAME:rfc1034identifier)";
@@ -499,13 +523,14 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CytubeChat1.0/CytubeChat-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		740BEF6819EC315500E577A0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F867DEFF7F0722362A8D54E3 /* Pods.release.xcconfig */;
+			baseConfigurationReference = 391673F474D341E899B7857E /* Pods-CytubeChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -514,7 +539,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_OPTIMIZATION_LEVEL = 3;
 				INFOPLIST_FILE = CytubeChat1.0/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LLVM_LTO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.milkbartube.$(PRODUCT_NAME:rfc1034identifier)";
@@ -522,6 +547,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CytubeChat1.0/CytubeChat-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

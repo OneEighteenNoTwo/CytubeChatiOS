@@ -18,7 +18,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         if user == nil {
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
             return
         }
         
@@ -31,15 +31,15 @@ class ProfileViewController: UIViewController {
         
         let urlString = user!.profileImage!.absoluteString
         
-        NSURLSession.sharedSession().dataTaskWithRequest(NSURLRequest(URL: user!.profileImage!)) {[weak self] data, res, err in
+        URLSession.shared.dataTask(with: URLRequest(url: user!.profileImage!), completionHandler: {[weak self] data, res, err in
             if err != nil || self == nil || data == nil {
                 return
             }
             
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 // Image is a GIF
                 if urlString[".gif$"].matches().count != 0 {
-                    let source = CGImageSourceCreateWithData(data!, nil)!
+                    let source = CGImageSourceCreateWithData(data! as CFData, nil)!
                     var images = [UIImage]()
                     var dur = 0.0
                     
@@ -53,7 +53,7 @@ class ProfileViewController: UIViewController {
                                 dur += delay
                             }
                         }
-                        images.append(UIImage(CGImage: asCGImage!))
+                        images.append(UIImage(cgImage: asCGImage!))
                     }
                     
                     self?.profileImageView.animationImages = images
@@ -61,13 +61,13 @@ class ProfileViewController: UIViewController {
                     self?.profileImageView.startAnimating()
                 } else {
                     self?.profileImageView.image = UIImage(data: data!)
-                    self?.profileImageView.contentMode = UIViewContentMode.ScaleAspectFit
+                    self?.profileImageView.contentMode = UIView.ContentMode.scaleAspectFit
                 }
             }
-            }.resume()
+            }) .resume()
     }
     
-    @IBAction func backBtnClicked(btn:UIBarButtonItem) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func backBtnClicked(_ btn:UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
     }
 }

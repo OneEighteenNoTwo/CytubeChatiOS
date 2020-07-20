@@ -8,12 +8,12 @@
 import UIKit
 
 class ChatCell: UITableViewCell, UITextViewDelegate {
-    var link:NSURL!
+    var link:URL!
     
-    func textView(textView:UITextView, shouldInteractWithURL URL:NSURL, inRange characterRange:NSRange) -> Bool {
+    func textView(_ textView:UITextView, shouldInteractWith URL:URL, in characterRange:NSRange) -> Bool {
         self.link = URL
         ((self.superview!.superview! as! UITableView).dataSource as! ChatWindowController)
-            .performSegueWithIdentifier("openChatLink", sender: self)
+            .performSegue(withIdentifier: "openChatLink", sender: self)
         return false
     }
 }

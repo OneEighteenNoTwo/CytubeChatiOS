@@ -14,7 +14,7 @@ class AddRoomsController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordText:UITextField!
     
     // Add room was pressed
-    @IBAction func btnAddTask(sender: UIButton) {
+    @IBAction func btnAddTask(_ sender: UIButton) {
         self.handleAddRoom()
     }
     
@@ -30,7 +30,7 @@ class AddRoomsController: UIViewController, UITextFieldDelegate {
         }
         
         let hostReachability = Reachability(hostName: server)
-        if hostReachability.currentReachabilityStatus().rawValue == 0 {
+        if hostReachability?.currentReachabilityStatus().rawValue == 0 {
             CytubeUtils.displayGenericAlertWithNoButtons(title: "Error", message:
                 "Please check that you entered a valid server" +
                 " and that you are connected to the internet.", view: self)
@@ -54,20 +54,20 @@ class AddRoomsController: UIViewController, UITextFieldDelegate {
         roomMng.saveRooms()
         self.tabBarController?.selectedIndex = 0
         
-        if !NSUserDefaults.standardUserDefaults().boolForKey("HasLaunchedOnce") {
+        if !UserDefaults.standard.bool(forKey: "HasLaunchedOnce") {
             CytubeUtils.displayGenericAlertWithNoButtons(title: "Hint",
                 message: "Click on a room to join it." +
                 " You can also long press on a room to bring up options for that room.", view: self)
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "HasLaunchedOnce")
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.set(true, forKey: "HasLaunchedOnce")
+            UserDefaults.standard.synchronize()
         }
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     
-    func textFieldShouldReturn(textField:UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
         textField.resignFirstResponder()
         self.handleAddRoom()
         return true

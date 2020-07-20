@@ -8,36 +8,36 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+	class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window:UIWindow?
     var backgroundID:UIBackgroundTaskIdentifier!
     
-    func application(application:UIApplication, didFinishLaunchingWithOptions launchOptions:[NSObject: AnyObject]?) -> Bool {
+    func application(_ application:UIApplication, didFinishLaunchingWithOptions launchOptions:[UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let cacheSizeMemory = 5*1024*1024 // 5MB
         let cacheSizeDisk = 32*1024*1024; // 32MB
-        let sharedCache = NSURLCache(memoryCapacity: cacheSizeMemory,
+        let sharedCache = URLCache(memoryCapacity: cacheSizeMemory,
             diskCapacity: cacheSizeDisk, diskPath: nil)
-        NSURLCache.setSharedURLCache(sharedCache)
+        URLCache.shared = sharedCache
         
-        internetReachability.startNotifier()
+        internetReachability?.startNotifier()
         roomMng.loadRooms()
         return true
     }
     
-    func applicationWillResignActive(application:UIApplication) {
+    func applicationWillResignActive(_ application:UIApplication) {
         // println("We are about to become inactive")
     }
     
-    func applicationDidEnterBackground(application:UIApplication) {
+    func applicationDidEnterBackground(_ application:UIApplication) {
         // println("We entered the background")
-        self.backgroundID = application.beginBackgroundTaskWithExpirationHandler() {[weak self] in
+        self.backgroundID = application.beginBackgroundTask(expirationHandler: {[weak self] in
             if self != nil {
                 application.endBackgroundTask(self!.backgroundID)
             }
-        }
+        })
         
-        dispatch_async(dispatch_get_global_queue(0, 0), {
+        DispatchQueue.global(qos: .userInitiated).async(execute: {
             // NSLog("Running in the background\n")
             roomMng.saveRooms()
             roomMng.closeRooms()
@@ -45,23 +45,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
     }
     
-    func applicationWillEnterForeground(application:UIApplication) {
+    func applicationWillEnterForeground(_ application:UIApplication) {
         // println("Coming back from the background")
     }
     
-    func applicationDidBecomeActive(application:UIApplication) {
+    func applicationDidBecomeActive(_ application:UIApplication) {
         // println("We will become active")
         roomMng.reopenRooms()
     }
     
-    func applicationWillTerminate(application:UIApplication) {
+    func applicationWillTerminate(_ application:UIApplication) {
         // println("We're going down")
         roomMng.saveRooms()
     }
     
-    func applicationDidReceiveMemoryWarning(application:UIApplication) {
+    func applicationDidReceiveMemoryWarning(_ application:UIApplication) {
         NSLog("Recieved memory warning, clearing url cache")
-        let sharedCache = NSURLCache.sharedURLCache()
+        let sharedCache = URLCache.shared
         sharedCache.removeAllCachedResponses()
     }
 }

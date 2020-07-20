@@ -1,7 +1,10 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, '10.0'
 use_frameworks!
 
-pod 'Socket.IO-Client-Swift', '~> 5.2.0' # Or latest version
-pod 'SQLite.swift',
-  git: 'https://github.com/stephencelis/SQLite.swift.git'
+target 'CytubeChat' do
+
+  pod 'Socket.IO-Client-Swift', '~> 15.2.0'
+  pod 'SQLite.swift', '~> 0.12.0'
+
+end

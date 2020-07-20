@@ -17,7 +17,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.room = roomMng.getActiveRoom()
-        if !NSUserDefaults.standardUserDefaults().boolForKey("HasLoggedIn") {
+        if !UserDefaults.standard.bool(forKey: "HasLoggedIn") {
             CytubeUtils.displayGenericAlertWithNoButtons(title: "Hint",
                 message: "You can login as guest by submitting a username without a password.",
                 view: self)
@@ -30,12 +30,12 @@ class LoginController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func backBtnClicked(btn:UIBarButtonItem) {
+    @IBAction func backBtnClicked(_ btn:UIBarButtonItem) {
         self.resignFirstResponder()
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func submitBtnClicked(btn:UIBarButtonItem) {
+    @IBAction func submitBtnClicked(_ btn:UIBarButtonItem) {
         self.resignFirstResponder()
         self.handleLogin()
     }
@@ -52,18 +52,18 @@ class LoginController: UIViewController, UITextFieldDelegate {
         self.room?.password = self.passwordText.text
         self.room?.sendLogin()
         
-        if self.rememberSwitch.on && self.passwordText.text != "" {
+        if self.rememberSwitch.isOn && self.passwordText.text != "" {
             self.room?.saveUser()
         } else {
             self.room?.forgetUser()
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "HasLoggedIn")
-        NSUserDefaults.standardUserDefaults().synchronize()
+        self.dismiss(animated: true, completion: nil)
+        UserDefaults.standard.set(true, forKey: "HasLoggedIn")
+        UserDefaults.standard.synchronize()
     }
     
-    func textFieldShouldReturn(textField:UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
         let nextTag = textField.tag + 1
         let nextResponder = textField.superview?.viewWithTag(nextTag)
         if nextResponder != nil {

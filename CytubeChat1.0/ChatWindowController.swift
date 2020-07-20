@@ -9,7 +9,7 @@ import UIKit
 
 private let sizingView = UITextView()
 
-class ChatWindowController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate {
+class ChatWindowController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var roomTitle:UIButton!
     @IBOutlet weak var messageView:UITableView!
@@ -29,39 +29,39 @@ class ChatWindowController: UIViewController, UITableViewDataSource, UITableView
         self.room = roomMng.getActiveRoom()
         if self.room != nil {
             if (room!.loggedIn) {
-                self.loginButton.enabled = false
-                self.chatInput.enabled = true
+                self.loginButton.isEnabled = false
+                self.chatInput.isEnabled = true
             }
         }
-        self.room?._setChatWindow(self)
-        self.roomTitle.setTitle(self.room?.roomName, forState: .Normal)
-        self.tapRec.addTarget(self, action: "tappedMessages")
+        self.room?._setChatWindow(view:self)
+        self.roomTitle.setTitle(self.room?.roomName, for: UIControl.State())
+        self.tapRec.addTarget(self, action: #selector(self.tappedMessages))
         self.messageView.addGestureRecognizer(self.tapRec)
     }
-    
-    override func viewDidAppear(animated:Bool) {
+
+    override func viewDidAppear(_ animated:Bool) {
         super.viewDidAppear(true)
-        
-        defaultCenter.addObserver(self, selector: "keyboardWillShow:",
-            name: UIKeyboardWillShowNotification, object: nil)
-        defaultCenter.addObserver(self, selector: "keyboardWillHide:",
-            name: UIKeyboardWillHideNotification, object: nil)
+        defaultCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)),
+                                  name: UIResponder.keyboardWillShowNotification,
+                                  object: nil)
+        defaultCenter.addObserver(self, selector: #selector(self.keyboardWillHide(_:)),
+            name: UIResponder.keyboardWillHideNotification, object: nil)
         defaultCenter.addObserver(self, selector: "wasKicked:",
-            name: "wasKicked", object: nil)
+            name: NSNotification.Name("wasKicked"), object: nil)
         defaultCenter.addObserver(self, selector: "passwordFail:",
-            name: "passwordFail", object: nil)
+            name: NSNotification.Name("passwordFail"), object: nil)
         defaultCenter.addObserver(self, selector: "handleNilSocketURL:",
-            name: "nilSocketURL", object: nil)
+            name: NSNotification.Name("nilSocketURL"), object: nil)
         defaultCenter.addObserver(self, selector: "handleNoInternet:",
-            name: "noInternet", object: nil)
+            name: NSNotification.Name("noInternet"), object: nil)
         defaultCenter.addObserver(self, selector: "handleSocketURLFail:",
-            name: "socketURLFail", object: nil)
+            name:NSNotification.Name("socketURLFail"), object: nil)
         defaultCenter.addObserver(self, selector: "handleSocketTimeout:",
-            name: "socketTimeout", object: nil)
+            name: NSNotification.Name("socketTimeout"), object: nil)
         
         if self.room.kicked {
             // TODO Save the kick reason
-            self.wasKicked(NSNotification(name: "wasKicked", object: [
+            self.wasKicked(Notification(name: NSNotification.Name("wasKicked"), object: [
                 "room": self.room.roomName,
                 "reason": ""
                 ]))
@@ -77,28 +77,29 @@ class ChatWindowController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         defaultCenter.removeObserver(self)
     }
     
-    override func prepareForSegue(segue:UIStoryboardSegue, sender:AnyObject?) {
+    override func prepare(for segue:UIStoryboardSegue, sender:Any?) {
         if let segueIdentifier = segue.identifier {
             if segueIdentifier == "openChatLink" {
                 let cell = sender as! ChatCell
-                (segue.destinationViewController as! ChatLinkController).link = cell.link
+                (segue.destination as! ChatLinkController).link = cell.link
             }
         }
     }
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.canScroll = false
     }
     
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         self.canScroll = true
     }
     
-    func keyboardWillShow(not:NSNotification) {
+    @objc
+    func keyboardWillShow(_ not:Notification) {
         if self.keyboardIsShowing {
             return
         }
@@ -107,29 +108,30 @@ class ChatWindowController: UIViewController, UITableViewDataSource, UITableView
         self.canScroll = true
         //let scrollNum = room?.messageBuffer.count
         let info = not.userInfo!
-        let keyboardFrame = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
 
-        UIView.animateWithDuration(0.3, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.inputBottomLayoutGuide.constant = keyboardFrame.size.height + 10
         })
         
-        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(0.01))
+        let time = DispatchTime.now() + Double(Int64(0.01)) / Double(NSEC_PER_SEC)
         
-        dispatch_after(time, dispatch_get_main_queue()) {self.scrollChat()}
+        DispatchQueue.main.asyncAfter(deadline: time) {self.scrollChat()}
     }
     
-    func keyboardWillHide(not:NSNotification) {
+    @objc
+    func keyboardWillHide(_ not:Notification) {
         self.canScroll = true
         self.keyboardIsShowing = false
         
-        UIView.animateWithDuration(0.3, animations: {[weak self] in
+        UIView.animate(withDuration: 0.3, animations: {[weak self] in
             if let this = self {
                 this.inputBottomLayoutGuide.constant = this.keyboardOffset
             }
         })
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if room != nil {
             return room!.messageBuffer.count
         } else {
@@ -137,48 +139,49 @@ class ChatWindowController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath:NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath:IndexPath) -> CGFloat {
         return self.heightForRowAtIndexPath(indexPath)
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = messageView.dequeueReusableCellWithIdentifier("chatWindowCell")! as UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = messageView.dequeueReusableCell(withIdentifier: "chatWindowCell")! as UITableViewCell
         let font = UIFont(name: "Helvetica Neue", size: 12)
         (cell.contentView.subviews[0] as! UITextView).font = font
         (cell.contentView.subviews[0] as! UITextView).text = nil
         (cell.contentView.subviews[0] as! UITextView).attributedText =
-            self.room?.messageBuffer.objectAtIndex(indexPath.row) as! NSMutableAttributedString
+            self.room?.messageBuffer.object(at: indexPath.row) as! NSMutableAttributedString
         
         return cell
     }
     
-    func heightForRowAtIndexPath(indexPath:NSIndexPath) -> CGFloat {
-        sizingView.attributedText = room?.messageBuffer.objectAtIndex(indexPath.row)
+    func heightForRowAtIndexPath(_ indexPath:IndexPath) -> CGFloat {
+        sizingView.attributedText = room?.messageBuffer.object(at: indexPath.row)
             as! NSMutableAttributedString
         
         let width = self.messageView.frame.size.width
-        let size = sizingView.sizeThatFits(CGSizeMake(width, 120.0))
+        let size = sizingView.sizeThatFits(CGSize(width: width, height: 120.0))
         
         return size.height + 3 // Need some padding
     }
     
     // Hide keyboard if we touch anywhere
+    @objc
     func tappedMessages() {
         self.view.endEditing(true)
         messageView.reloadData()
     }
     
-    func textFieldShouldReturn(textField:UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
         let msg = chatInput.text
-        room?.sendChatMsg(msg)
+        room?.sendChatMsg(msg:msg)
         chatInput.text = nil
         return false
     }
     
-    @IBAction func backBtnClicked(btn:UIBarButtonItem) {
-        self.room?._setChatWindow(nil)
+    @IBAction func backBtnClicked(_ btn:UIBarButtonItem) {
+        self.room?._setChatWindow(view:nil)
         self.resignFirstResponder()
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func scrollChat() {
@@ -186,31 +189,31 @@ class ChatWindowController: UIViewController, UITableViewDataSource, UITableView
             return
         }
         
-        self.messageView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.room.messageBuffer.count - 1, inSection: 0),
-            atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+        self.messageView.scrollToRow(at: IndexPath(row: self.room.messageBuffer.count - 1, section: 0),
+            at: UITableView.ScrollPosition.bottom, animated: true)
     }
     
-    func handleNilSocketURL(not:NSNotification) {
+    func handleNilSocketURL(_ not:Notification) {
         CytubeUtils.displayGenericAlertWithNoButtons(title: "Connection Failed",
             message: "Could not connect to server, check you are connected to the internet", view: self)
     }
     
-    func handleNoInternet(not:NSNotification) {
+    func handleNoInternet(_ not:Notification) {
         CytubeUtils.displayGenericAlertWithNoButtons(title: "No Internet",
             message: "Check your internet connection", view: self)
     }
     
-    func handleSocketURLFail(not:NSNotification) {
+    func handleSocketURLFail(_ not:Notification) {
         CytubeUtils.displayGenericAlertWithNoButtons(title: "Socket Failure", message: "Failed to load socketURL. Check you entered" +
             " the server correctly", view: self)
     }
     
-    func handleSocketTimeout(not:NSNotification) {
+    func handleSocketTimeout(_ not:Notification) {
         CytubeUtils.displayGenericAlertWithNoButtons(title: "Timeout", message: "It is taking too long to connect." +
             "The server may be having trouble, or your connection is poor.", view: self)
     }
     
-    func wasKicked(not:NSNotification) {
+    func wasKicked(_ not:Notification) {
         let roomName = self.room!.roomName
         let kickObj = not.object as! NSDictionary
         
@@ -222,31 +225,31 @@ class ChatWindowController: UIViewController, UITableViewDataSource, UITableView
         let reason = kickObj["reason"] as! String
         
         let alert = UIAlertController(title: "Kicked", message:
-            "You have been kicked from room \(roomName). Reason: \(reason)", preferredStyle: UIAlertControllerStyle.Alert)
-        let action = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default) {action in
-            self.room?._setChatWindow(nil)
+            "You have been kicked from room \(roomName). Reason: \(reason)", preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {action in
+            self.room?._setChatWindow(view:nil)
             self.room?.closeRoom()
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
         alert.addAction(action)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
-    func passwordFail(not:NSNotification) {
+    func passwordFail(_ not:Notification) {
         let roomName = self.room!.roomName
         let alert = UIAlertController(title: "Password Fail", message:
             "No password, or incorrect password for: \(roomName). Please try adding again.",
-            preferredStyle: UIAlertControllerStyle.Alert)
-        let action = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default) {action in
-            self.room?._setChatWindow(nil)
-            self.dismissViewControllerAnimated(true, completion: nil)
+            preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {action in
+            self.room?._setChatWindow(view:nil)
+            self.dismiss(animated: true, completion: nil)
         }
         alert.addAction(action)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
+        self.dismiss(animated: true, completion: nil)
     }
 }

@@ -19,75 +19,75 @@ class UserlistController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         self.room = roomMng.getActiveRoom()
         self.userlistTitle.title = room.roomName + " userlist"
-        self.room.setUserListView(self)
+        self.room.setUserListView(view:self)
         self.tblUserlist.reloadData()
         
-        if !NSUserDefaults.standardUserDefaults().boolForKey("HasSeenUserlist") {
+        if !UserDefaults.standard.bool(forKey: "HasSeenUserlist") {
             CytubeUtils.displayGenericAlertWithNoButtons(title: "Hint",
                 message: "You can view a users profile by tapping on that user. Also, if that" +
                 " user is annoying you, long press on their name to bring up options to ignore them.",
                 view: self)
         }
         
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "HasSeenUserlist")
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.set(true, forKey: "HasSeenUserlist")
+        UserDefaults.standard.synchronize()
     }
     
-    override func viewDidAppear(animated:Bool) {
+    override func viewDidAppear(_ animated:Bool) {
         self.tblUserlist.reloadData()
     }
     
-    override func viewDidDisappear(animated:Bool) {
-        self.room.setUserListView(nil)
+    override func viewDidDisappear(_ animated:Bool) {
+        self.room.setUserListView(view:nil)
     }
     
-    override func prepareForSegue(segue:UIStoryboardSegue, sender:AnyObject?) {
+    override func prepare(for segue:UIStoryboardSegue, sender:Any?) {
         if let segueIdentifier = segue.identifier {
             if segueIdentifier == "showProfile" {
-                (segue.destinationViewController as! ProfileViewController).user = self.selectedUser
+                (segue.destination as! ProfileViewController).user = self.selectedUser
             }
         }
     }
     
-    @IBAction func backBtnClicked(btn:UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func backBtnClicked(_ btn:UIBarButtonItem) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func didLongPress(sender:UIGestureRecognizer) {
+    @IBAction func didLongPress(_ sender:UIGestureRecognizer) {
         if self.inAlert {
             return
         }
         
         self.inAlert = true
-        let point = sender.locationInView(self.tblUserlist)
-        let indexPath = self.tblUserlist.indexPathForRowAtPoint(point)
+        let point = sender.location(in: self.tblUserlist)
+        let indexPath = self.tblUserlist.indexPathForRow(at: point)
         if indexPath == nil {
             self.inAlert = false
             return
         }
         
         self.selectedUser = self.room.userlist[indexPath!.row]
-        if self.selectedUser.username.lowercaseString
-            == self.room.username?.lowercaseString {
+        if self.selectedUser.username.lowercased()
+            == self.room.username?.lowercased() {
                 return
         }
         self.showIgnoreUserAlert(user: self.selectedUser)
     }
     
-    func tableView(tableView:UITableView, numberOfRowsInSection section:Int) -> Int {
+    func tableView(_ tableView:UITableView, numberOfRowsInSection section:Int) -> Int {
         return self.room.userlist.count
     }
     
-    func tableView(tableView:UITableView,
-        cellForRowAtIndexPath indexPath:NSIndexPath) -> UITableViewCell {
-            let cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "userlistCell")
+    func tableView(_ tableView:UITableView,
+        cellForRowAt indexPath:IndexPath) -> UITableViewCell {
+            let cell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "userlistCell")
             let user = self.room.userlist[indexPath.row]
             
             cell.textLabel?.attributedText = user.createAttributedStringForUser()
             return cell
     }
     
-    func tableView(tableView:UITableView, didSelectRowAtIndexPath indexPath:NSIndexPath) {
+    func tableView(_ tableView:UITableView, didSelectRowAt indexPath:IndexPath) {
         self.selectedUser = self.room.userlist[indexPath.row]
         
         if self.selectedUser != nil {
@@ -95,14 +95,14 @@ class UserlistController: UIViewController, UITableViewDelegate, UITableViewData
                 && self.selectedUser.profileImage == nil {
                 return
             }
-            self.performSegueWithIdentifier("showProfile", sender: self)
+            self.performSegue(withIdentifier: "showProfile", sender: self)
         }
     }
     
-    func showIgnoreUserAlert(user user:CytubeUser) {
+    func showIgnoreUserAlert(user:CytubeUser) {
         var title:String!
         var message:String!
-        if CytubeUtils.userIsIgnored(ignoreList: self.room.ignoreList, user: user) {
+        if CytubeUtils.userIsIgnored(ignoreList: self.room.ignoreList, user: user.username) {
             title = "Unignore"
             message = "Unignore \(user.username)?"
         } else {
@@ -111,12 +111,12 @@ class UserlistController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         let alert = UIAlertController(title: title, message:
-            message, preferredStyle: UIAlertControllerStyle.Alert)
-        let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) {alert in
+            message, preferredStyle: UIAlertController.Style.alert)
+        let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {alert in
             if title == "Unignore" {
                 for i in 0..<self.room.ignoreList.count {
                     if self.room.ignoreList[i] == self.selectedUser.username {
-                        self.room.ignoreList.removeAtIndex(i)
+                        self.room.ignoreList.remove(at: i)
                     }
                 }
                 self.inAlert = false
@@ -125,12 +125,12 @@ class UserlistController: UIViewController, UITableViewDelegate, UITableViewData
                 self.inAlert = false
             }
         }
-        let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel) {alert in
+        let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.cancel) {alert in
             self.inAlert = false
             return
         }
         alert.addAction(yesAction)
         alert.addAction(noAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 }
